@@ -6,6 +6,8 @@ cwd = os.path.dirname(os.path.realpath(__file__))
 cpu_path = os.path.join(cwd, 'cpu')
 gpu_path = os.path.join(cwd, 'gpu')
 
+env_cuda = os.getenv('BUILD_WITH_CUDA', False)
+
 cpu = load('enclib_cpu', [
         os.path.join(cpu_path, 'operator.cpp'),
         os.path.join(cpu_path, 'encoding_cpu.cpp'),
@@ -15,7 +17,7 @@ cpu = load('enclib_cpu', [
         os.path.join(cpu_path, 'rectify_cpu.cpp'),
     ], build_directory=cpu_path, verbose=False)
 
-if torch.cuda.is_available():
+if torch.cuda.is_available() or env_cuda:
     gpu = load('enclib_gpu', [
             os.path.join(gpu_path, 'operator.cpp'),
             os.path.join(gpu_path, 'activation_kernel.cu'),
